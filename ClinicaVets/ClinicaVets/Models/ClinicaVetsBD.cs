@@ -17,6 +17,7 @@ namespace ClinicaVets.Models
 
         //descrever as tabelas que estao na base de dados 
         public virtual DbSet<Donos> Donos { get; set; }
+        public virtual DbSet<Animais> Animais { get; set; }
 
     }
 }
