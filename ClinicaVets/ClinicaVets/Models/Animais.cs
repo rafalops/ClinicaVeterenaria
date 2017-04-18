@@ -1,23 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace ClinicaVets.Models
 {
-    public class Animais
-    {
-        public int AnimaisID { get; set; }
-        public string  NomeDoAnimal { get; set; }
-        public string Especie { get; set; }
-        public string Raca { get; set; }
-        //...outros atributos ficariam aqui
+    public class Animais {
+        // ANIMAIS
+        //=============================================================
 
-        //criar uma chave forasteira - FK
+        public Animais()
+        {
+            // inicialização da lista de Consultas de um Animal
+            Consultas = new HashSet<Consultas>();
+        }
+
+        [Key]
+        public int AnimalID { get; set; }
+
+        [Required]
+        [StringLength(30)]
+        public string Nome { get; set; }
+
+        [Required]
+        [StringLength(30)]
+        public string Especie { get; set; }
+
+        [Required]
+        [StringLength(30)]
+        public string Raca { get; set; }
+
+        public float Peso { get; set; }
+
+        public float? Altura { get; set; }
+        // **************************
+        // criar a chave forasteira
+        // relaciona o objeto ANIMAL com um objeto DONO
+        public Donos Dono { get; set; }
+
+        // cria um atributo para funcionar como FK, na BD
+        // e relaciona-o com o atributo anterior
         [ForeignKey("Dono")]
-        public int DonoFK { get; set; } //Existe para criar a FK na BD
-        public Donos Dono { get; set; } //Existe para relacionar os objetos no C#
+        public int DonosFK { get; set; }
+        // **************************
+
+        // um ANIMAL tem uma coleção de CONSULTAS
+        public virtual ICollection<Consultas> Consultas { get; set; }
 
     }
 }

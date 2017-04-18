@@ -136,7 +136,9 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Animais.cs" />
     <Compile Include="Models\ClinicaVetsBD.cs" />
+    <Compile Include="Models\Consultas.cs" />
     <Compile Include="Models\Donos.cs" />
+    <Compile Include="Models\Veterinarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
