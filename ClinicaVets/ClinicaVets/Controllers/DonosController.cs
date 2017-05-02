@@ -92,16 +92,20 @@ namespace ClinicaVets.Controllers
         // GET: Donos/Delete/5
         public ActionResult Delete(int? id)
         {
+            //Avalia se o parâmetro é nulo
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //Redireciona a página para o inicio
+                return RedirectToAction("Index"); 
             }
-            Donos donos = db.Donos.Find(id);
-            if (donos == null)
+            Donos dono = db.Donos.Find(id);
+            //Se o dono nao é encontrado...
+            if (dono == null)
             {
-                return HttpNotFound();
+                //Redirecionar para a pagina inicial
+                return RedirectToAction("Index");
             }
-            return View(donos);
+            return View(dono);
         }
 
         // POST: Donos/Delete/5
@@ -109,9 +113,23 @@ namespace ClinicaVets.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Donos donos = db.Donos.Find(id);
-            db.Donos.Remove(donos);
-            db.SaveChanges();
+            //Procurar o 'dono' na BD, cula PK é igual ao parametro fornecido -id-
+            Donos dono = db.Donos.Find(id);
+            try{
+                //Remove do objeto 'db' , o dono encontrado na linha anterior 
+                db.Donos.Remove(dono);
+                //Torna definitivas as instruçoes anteriores 
+                db.SaveChanges();
+            }
+            catch (Exception){
+                //Gerar uma mensagem de erro a ser entregue ao utilizador
+                ModelState.AddModelError("",
+                    string.Format("Ocorreu um erro na operação de eliminar o 'dono' com ID {0} - {1}", id, dono.Nome)
+                );
+                //Regressar á view 'delete'
+                return View(dono);
+            }
+            //devolve o controlo do programa, apresentando a view 'Index'
             return RedirectToAction("Index");
         }
 
