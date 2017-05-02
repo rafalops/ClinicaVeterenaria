@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -25,13 +26,17 @@ namespace ClinicaVets.Models
         }
 
 
-        [Key]
+        [Key]//indica que o atributo é PK
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]//marca o atributo
+        [Display(Name = "Identificador do Cliente")]
         public int DonoID { get; set; }
-
-        [Required]
+        //Atributo é obrigatorio
+        [Required(ErrorMessage = "O {0} é de preencimento obrigatório")]
+        [Display(Name = "Nome do cliente")]
         public string Nome { set; get; }
 
-        [Required]
+        [Required(ErrorMessage = "O NIF é de preencimento obrigatório")]
+        [Display(Name = "NIF do cliente")]
         public string NIF { get; set; }
 
         // especificar que um DONO tem muitos ANIMAIS
