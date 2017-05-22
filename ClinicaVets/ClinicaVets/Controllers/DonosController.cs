@@ -46,16 +46,30 @@ namespace ClinicaVets.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "DonoID,Nome,NIF")] Donos donos)
+        public ActionResult Create([Bind(Include = "Nome,NIF")] Donos dono)
         {
+            //Determinar o ID a atribuir ao novo DONO
+            //Criar a var que recebe esse valor
+            int novoID = 0;
+            //Determinar o novo ID
+            novoID =(from d in db.Donos
+                     orderby d.DonoID descending
+                     select d.DonoID).FirstOrDefault() +1;
+
+            /* Outra forma
+             novoID =db.Donos.max(d=>d.DonoID)+1; */
+
+            //Atribuir o 'novoID' ao objeto 'dono'
+            dono.DonoID = novoID;
+
             if (ModelState.IsValid)
             {
-                db.Donos.Add(donos);
+                db.Donos.Add(dono);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(donos);
+            return View(dono);
         }
 
         // GET: Donos/Edit/5
