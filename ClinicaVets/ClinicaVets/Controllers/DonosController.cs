@@ -12,7 +12,7 @@ namespace ClinicaVets.Controllers
 {
     public class DonosController : Controller
     {
-        private ClinicaVetsBD db = new ClinicaVetsBD();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Donos
         public ActionResult Index()
