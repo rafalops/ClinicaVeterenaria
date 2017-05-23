@@ -51,26 +51,45 @@ namespace ClinicaVets.Controllers
             //Determinar o ID a atribuir ao novo DONO
             //Criar a var que recebe esse valor
             int novoID = 0;
-            //Determinar o novo ID
-            novoID =(from d in db.Donos
-                     orderby d.DonoID descending
-                     select d.DonoID).FirstOrDefault() +1;
+            
+            try
+            {
+                //Determinar o novo ID
+                /*novoID =(from d in db.Donos
+                    orderby d.DonoID descending
+                    select d.DonoID).FirstOrDefault() +1;*/
 
-            /* Outra forma
-             novoID =db.Donos.max(d=>d.DonoID)+1; */
-
+                //Outra forma
+                novoID = db.Donos.Max(d => d.DonoID) + 1;
+            }
+            catch (System.Exception){
+                //A tabela donos está vazia, não sendo possivel devolver o Max de uma tabela
+                //Atribuir manualmente o ID ao primeiro Dono
+                novoID = 1;
+            }
+    
             //Atribuir o 'novoID' ao objeto 'dono'
             dono.DonoID = novoID;
 
-            if (ModelState.IsValid)
+            try
             {
-                db.Donos.Add(dono);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Donos.Add(dono);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-
+            catch (System.Exception)
+            {
+                //não consigo guardar as alterações
+                //no mínimo, preciso de notoficar o utilizador que o processo falhou
+                ModelState.AddModelError("", "Ocorreu um erro na adição do novo Dono");
+                //notificar o admin  que ocorreu este erro, fazer: 1ºenviar email ao programador,
+                //2º ter uma tabela na BD, onde são reportados os erros:-data-metodo-controller-detalhes do erro
+            }
             return View(dono);
-        }
+        }//Fecha o public ActionResult Create
 
         // GET: Donos/Edit/5
         public ActionResult Edit(int? id)
