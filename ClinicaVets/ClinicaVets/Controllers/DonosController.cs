@@ -10,6 +10,8 @@ using ClinicaVets.Models;
 
 namespace ClinicaVets.Controllers
 {
+    [Authorize]
+
     public class DonosController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -17,7 +19,14 @@ namespace ClinicaVets.Controllers
         // GET: Donos
         public ActionResult Index()
         {
-            return View(db.Donos.ToList().OrderBy(d => d.Nome));
+            //mostrar os dados de todos os Donos apenas aos utilizadores de perfil 'Funcionario' ou perfil 'veterinario'
+            if(User.IsInRole("Funcionario") || User.IsInRole("Veterinario"))
+            {
+                return View(db.Donos.ToList().OrderBy(d => d.DonoID));
+            }    
+            //senão mostra os dados do utilizador autenticado
+            return View(db.Donos.Where(d => d.NomeDoUtilizador == User.Identity.Name).ToList());
+
         }
 
         // GET: Donos/Details/5
@@ -36,6 +45,7 @@ namespace ClinicaVets.Controllers
         }
 
         // GET: Donos/Create
+        [Authorize(Roles="Funcionario")]
         public ActionResult Create()
         {
             return View();
@@ -46,6 +56,7 @@ namespace ClinicaVets.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles="Funcionario")]
         public ActionResult Create([Bind(Include = "Nome,NIF")] Donos dono)
         {
             //Determinar o ID a atribuir ao novo DONO

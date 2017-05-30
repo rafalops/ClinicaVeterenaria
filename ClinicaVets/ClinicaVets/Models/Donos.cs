@@ -34,7 +34,7 @@ namespace ClinicaVets.Models
         [Required(ErrorMessage = "O {0} é de preencimento obrigatório")]
         [Display(Name = "Nome do cliente")]
         //Criar um filtro que valide um nome
-        [RegularExpression("[A-Z][a-záéíóúàèìòùãõç]+((( )|(-)|( (e|de|da|do|dos) )|( d'))[A-Z][a-záéíóúàèìòùãõç]+){1,6}",ErrorMessage = "O seu nome não é válido.Dica comece o Nome com maiscúlas")]
+        [RegularExpression("[A-Z][a-záéíóúàèìòùâêîôûãõç]+((( )|(-)|( (e|de|da|do|dos) )|( d'))[A-Z][a-záéíóúàèìòùãõç]+){1,6}",ErrorMessage = "O seu nome não é válido.Dica comece o Nome com maiscúlas")]
         // http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?         link
         // \w+([-+.']\w+)*@\w+ \. \w                             mail
         // d{4} (-\d{3})?( \w+)*                                 codigo postal
@@ -44,6 +44,10 @@ namespace ClinicaVets.Models
         [Display(Name = "NIF do cliente")]
         [RegularExpression("[0-9]{9}",ErrorMessage = "{0} incorreto,insira o seu {0} com algarismos entre 0 e 9, com tamanho de 9 algarismos")]
         public string NIF { get; set; }
+
+        //Criar uma 'ponte' entre a BD do Clinica e a BD de autenticação
+        public string NomeDoUtilizador { get; set; }
+
 
         // especificar que um DONO tem muitos ANIMAIS
         public ICollection<Animais> ListaDeAnimais { get; set; }
